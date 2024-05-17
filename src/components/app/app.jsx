@@ -1,8 +1,16 @@
+import Hero from '../hero/hero'
+import Navbar from '../navbar/navbar'
+import RowMovies from '../row-movies/row-movies'
+
 function App() {
 	return (
-		<div>
-			<div className='app'>APP</div>
-		</div>
+		<>
+			<div className='app'>
+				<Navbar />
+				<Hero />
+				<RowMovies />
+			</div>
+		</>
 	)
 }
 
