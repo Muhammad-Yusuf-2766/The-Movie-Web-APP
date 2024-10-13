@@ -1,24 +1,38 @@
 import React from 'react'
 import { Modal } from 'react-responsive-modal'
 import 'react-responsive-modal/styles.css'
-import { movies } from '../constants'
+import MovieService from '../../services/movie-service'
 import MovieInfo from '../movie-info/movie-info'
 import RowMoviesItem from '../row-movies-item/row-movies-item'
 import './row-movies.scss'
 
 class RowMovies extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			open: false,
-		}
+	state = {
+		open: false,
+		movies: [],
+		movieId: null,
+	}
+	movieService = new MovieService()
+
+	componentDidMount() {
+		this.getTrandgingMovies()
 	}
 
-	onToggleOpen = () => {
-		this.setState(state => ({ open: !state.open }))
+	onOpen = id => this.setState({ open: true, movieId: id })
+
+	onClose = () => this.setState({ open: false })
+
+	getTrandgingMovies = () => {
+		this.movieService
+			.getTrandingMovies()
+			.then(res => this.setState({ movies: res }))
 	}
+
+	// onToggleOpen = () => {
+	// 	this.setState(state => ({ open: !state.open }))
+	// }
 	render() {
-		const { open } = this.state
+		const { open, movies, movieId } = this.state
 		return (
 			<div className='rowmovies'>
 				<div className='rowmovies__top'>
@@ -31,17 +45,13 @@ class RowMovies extends React.Component {
 					<a href='#'>See more...</a>
 				</div>
 				<div className='rowmovies__lists'>
-					{movies.map((movie, id) => (
-						<RowMoviesItem
-							key={id}
-							movie={{ ...movie, index: id }}
-							onToggleOpen={this.onToggleOpen}
-						/>
+					{movies.map(movie => (
+						<RowMoviesItem key={movie.id} movie={movie} onOpen={this.onOpen} />
 					))}
 				</div>
 
-				<Modal open={open} onClose={this.onToggleOpen}>
-					<MovieInfo />
+				<Modal open={open} onClose={this.onClose}>
+					<MovieInfo movieId={movieId} />
 				</Modal>
 			</div>
 		)

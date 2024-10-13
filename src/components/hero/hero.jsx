@@ -13,10 +13,14 @@ class Hero extends React.Component {
 			error: false,
 		}
 		this.movieService = new MovieService()
-		this.getMovie() // Bu useEffect ni o'rniga ishlaydigan kod. (eski va noto'g'ri usul)
+		// this.getMovie() // Bu useEffect ni o'rniga ishlaydigan kod. (eski va noto'g'ri usul)
 	}
 
-	getMovie = () => {
+	componentDidMount() {
+		this.updateMovie()
+	}
+
+	updateMovie = () => {
 		this.movieService
 			.getRandoMovie()
 			.then(res => this.setState({ movie: res }))
@@ -44,7 +48,14 @@ class Hero extends React.Component {
 						quas expedita culpa sequi ad beatae facilis vitae, ducimus sed totam
 						suscipit reprehenderit officiis?
 					</p>
-					<button className='btn btn-primary'>Details</button>
+					{/* <button className='btn btn-primary'>Details</button> */}
+					<button
+						className='btn btn-secondary'
+						style={{ marginTop: '40px' }}
+						onClick={this.updateMovie}
+					>
+						Random movie
+					</button>
 				</div>
 				<div className='hero__movie'>
 					{errorContent}
@@ -66,13 +77,11 @@ const HeroRandomMovie = ({ movie }) => {
 				<h2>{movie.name}</h2>
 				<p>
 					{movie.description && movie.description.length >= 80
-						? `${movie.description.slice(0, 200)}...`
+						? `${movie.description.slice(0, 250)}...`
 						: movie.description}
 				</p>
-				<div>
-					<button className='btn btn-secondary'>Random</button>
-					<button className='btn btn-primary'>Details</button>
-				</div>
+				{/* <button className='btn btn-secondary'>Random</button> */}
+				<button className='btn btn-primary'>Details</button>
 			</div>
 		</>
 	)
